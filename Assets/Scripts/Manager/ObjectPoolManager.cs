@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class ObjectPoolManager : MonoBehaviour
 {
-    int NowLevel;
-
     public GameObject ArrowPrefab;
     public GameObject PlusScorePrefab;
     public GameObject GrassObstaclePrefab;

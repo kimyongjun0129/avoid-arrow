@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class Trap : MonoBehaviour
 {
-    [SerializeField] private GameManager gameManager;
     [SerializeField] private AudioManager audioManager;
     [SerializeField] private ArrowManager arrowManager;
     [SerializeField] private float Speed;
@@ -18,7 +17,6 @@ public class Trap : MonoBehaviour
 
     private void Awake()
     {
-        gameManager = FindObjectOfType<GameManager>();
         Anim = GetComponent<Animator>();
         audioManager = FindObjectOfType<AudioManager>();
         arrowManager = FindObjectOfType<ArrowManager>();
@@ -32,7 +30,7 @@ public class Trap : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(gameManager.IsGameActive())
+        if (GameManager.instance.IsGameActive())
         {
             Move();
             CheckOutOfBounds();
@@ -67,7 +65,7 @@ public class Trap : MonoBehaviour
         ContactPoint2D contact = collision.contacts[0];
         float ColPos = contact.point.x;
 
-        if (collision.gameObject.CompareTag("Player") && gameManager != null && gameManager.IsGameActive())
+        if (collision.gameObject.CompareTag("Player") && GameManager.instance != null && GameManager.instance.IsGameActive())
         {
             Anim.SetTrigger("IsCut");
             arrowManager.SetTrapArrowSpawnSpot(ColPos);

@@ -2,13 +2,7 @@ using UnityEngine;
 
 public class Arrow : MonoBehaviour
 {
-    [SerializeField] private GameManager gameManager;
     [SerializeField] private float Speed;
-
-    void Start ()
-    {
-        gameManager = FindObjectOfType<GameManager>();
-    }
 
     // 속도를 동적으로 변경하는 함수
     public void SetSpeed(float newSpeed)
@@ -47,7 +41,7 @@ public class Arrow : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         // -- Tag가 "Player"이고 게임이 진행중이라면 실행 -- //
-        if (collision.gameObject.CompareTag("Player") && gameManager != null && gameManager.IsGameActive())
+        if (collision.gameObject.CompareTag("Player") && GameManager.instance != null && GameManager.instance.IsGameActive())
         {
             DestroyArrow();
         }

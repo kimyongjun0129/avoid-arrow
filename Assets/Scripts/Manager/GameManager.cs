@@ -3,10 +3,15 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager instance;
     public SpriteRenderer[] Grounds;
     public Sprite[] LevelSprite;
-
     public bool isGameActive = true;
+
+    void Awake()
+    {
+        instance = this;
+    }
 
     void Start()
     {

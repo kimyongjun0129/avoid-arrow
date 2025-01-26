@@ -4,14 +4,13 @@ using UnityEngine;
 public class LevelManager : MonoBehaviour
 {
     [SerializeField] private ArrowManager arrowManager;
-    [SerializeField] private GameManager gameManager;
     [SerializeField] private ObjectPoolManager objectPoolManager;
     [SerializeField] private AudioManager audioManager;
 
     public Rigidbody2D rb;
 
     // -- 현재 레벨(변하지 않음) -- //
-    private int NowLevel_Game;               
+    private int NowLevel_Game;
 
     // 화살 생성 속도 변수
     private const float MaxSpeed = 0.4f;
@@ -47,11 +46,11 @@ public class LevelManager : MonoBehaviour
         NowLevel_Game = DataManager.Instance.data.NowLevel_Game;
         rb = FindObjectOfType<Rigidbody2D>();
 
-        if (NowLevel_Game == 4 && gameManager.IsGameActive())
+        if (NowLevel_Game == 4 && GameManager.instance.IsGameActive())
         {
             HeatBar.SetActive(true);
         }
-        else 
+        else
         {
             HeatBar.SetActive(false);
         }
@@ -59,7 +58,7 @@ public class LevelManager : MonoBehaviour
 
     public void Update()
     {
-        if (!gameManager.IsGameActive())
+        if (!GameManager.instance.IsGameActive())
         {
             StopAllCoroutines();
         }
@@ -72,7 +71,7 @@ public class LevelManager : MonoBehaviour
         {
             arrowManager.SetArrowSpeed(-14f);
         }
-        else if (currentScore >= 500) 
+        else if (currentScore >= 500)
         {
             arrowManager.SetArrowSpeed(-13.5f);
         }
@@ -123,7 +122,7 @@ public class LevelManager : MonoBehaviour
             Obstacle(NowLevel_Game);
             ObstacleTrig = false;
         }
-        else if (NowLevel_Game == 4 && gameManager.IsGameActive() && SnowTrig)
+        else if (NowLevel_Game == 4 && GameManager.instance.IsGameActive() && SnowTrig)
         {
             SnowTrig = false;       // 여러번 실행 방지
             snow.Snowing();
@@ -152,7 +151,7 @@ public class LevelManager : MonoBehaviour
 
         IEnumerator GrassObstacleSpawn()    // Level 2
         {
-            while (gameManager.IsGameActive())   // 게임이 중지되면, 코루틴 중지
+            while (GameManager.instance.IsGameActive())   // 게임이 중지되면, 코루틴 중지
             {
                 // Level 2 장애물 함수 호출
                 GameObject GrassObstacle = objectPoolManager.GetObjectFromPool(objectPoolManager.grassObstaclePool);
@@ -173,7 +172,7 @@ public class LevelManager : MonoBehaviour
 
         IEnumerator TrapSpawn()    // Level 3
         {
-            while (gameManager.IsGameActive())   // 게임이 중지되면, 코루틴 중지
+            while (GameManager.instance.IsGameActive())   // 게임이 중지되면, 코루틴 중지
             {
                 // 생성 함수 호출
                 GameObject TrapObstacle = objectPoolManager.GetObjectFromPool(objectPoolManager.TrapObstaclePool);
@@ -194,11 +193,11 @@ public class LevelManager : MonoBehaviour
 
         IEnumerator DustSpawn()     // Level 4
         {
-            while (gameManager.IsGameActive())   // 게임이 중지되면, 코루틴 중지
+            while (GameManager.instance.IsGameActive())   // 게임이 중지되면, 코루틴 중지
             {
                 Dust.SetActive(true);
                 StartCoroutine(Delay());
-                yield return new WaitForSecondsRealtime(Random.Range(DustCreateTime, DustCreateTime+6));  // Level 4 장애물 생성 주기
+                yield return new WaitForSecondsRealtime(Random.Range(DustCreateTime, DustCreateTime + 6));  // Level 4 장애물 생성 주기
             }
         }
 
@@ -210,7 +209,7 @@ public class LevelManager : MonoBehaviour
 
         IEnumerator SnowObstacleSpawn()    // Level 5
         {
-            while (gameManager.IsGameActive())   // 게임이 중지되면, 코루틴 중지
+            while (GameManager.instance.IsGameActive())   // 게임이 중지되면, 코루틴 중지
             {
                 // Level 2 장애물 함수 호출
                 GameObject SnowObstacle = objectPoolManager.GetObjectFromPool(objectPoolManager.snowObstaclePool);
@@ -219,13 +218,13 @@ public class LevelManager : MonoBehaviour
                 if (SnowObstacle != null)
                 {
                     SnowObstacle.GetComponent<SnowObstacle>().SetSpeed(SnowObstacleSpeed);   // Level 5 속도
-                    SnowObstacle.transform.position = new Vector2(Random.Range(-2f, 2f), Random.Range(4f,7f));  // Level 5 생성 지점
+                    SnowObstacle.transform.position = new Vector2(Random.Range(-2f, 2f), Random.Range(4f, 7f));  // Level 5 생성 지점
                     SnowObstacle.SetActive(true);  // 활성화
                     // 소리 삽입
                 }
 
                 // 주기적으로 대기
-                yield return new WaitForSecondsRealtime(Random.Range(SnowObstacleCreateTime, SnowObstacleCreateTime+4));  // Level 5 장애물 생성 주기
+                yield return new WaitForSecondsRealtime(Random.Range(SnowObstacleCreateTime, SnowObstacleCreateTime + 4));  // Level 5 장애물 생성 주기
             }
         }
     }

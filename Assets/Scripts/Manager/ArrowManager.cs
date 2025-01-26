@@ -9,7 +9,6 @@ public class ArrowManager : MonoBehaviour
 
     // -- 매니저 -- //
     [SerializeField] private ObjectPoolManager objectPoolManager;
-    [SerializeField] private GameManager gameManaer;
 
     // -- 플레이어의 Transform을 저장하는 변수 -- //
     [SerializeField] private Transform playerTransform;
@@ -30,7 +29,7 @@ public class ArrowManager : MonoBehaviour
     public IEnumerator RandomArrowSpawn()
     {
         // -- 게임 중단 시 코루틴 종료 -- //
-        while (gameManaer.IsGameActive())
+        while (GameManager.instance.IsGameActive())
         {
             // -- 풀링 된 화살을 가져와 오브젝트 변수에 할당 -- //
             GameObject arrow = objectPoolManager.GetObjectFromPool(objectPoolManager.randomArrowPool);
@@ -55,7 +54,7 @@ public class ArrowManager : MonoBehaviour
     public IEnumerator TargertArrowSpawn()
     {
         // -- 게임 중단 시 코루틴 종료 -- //
-        while (gameManaer.IsGameActive()) 
+        while (GameManager.instance.IsGameActive())
         {
             // -- 화살 생성 주기 마다 반복 실행 (랜덤 화살 생성 주기 * 1.7) -- //
             yield return new WaitForSecondsRealtime(RandomArrowSpawnInterval * 1.7f);
@@ -64,7 +63,7 @@ public class ArrowManager : MonoBehaviour
             GameObject arrow = objectPoolManager.GetObjectFromPool(objectPoolManager.targetArrowPool);
 
             // -- 오브젝트가 비어있지 않는 경우 실행 -- //
-            if (arrow != null) 
+            if (arrow != null)
             {
                 // -- 오브젝트에 Arrow Component의 속도를 설정하여 부착시킨다. -- //
                 arrow.GetComponent<Arrow>().SetSpeed(ArrowSpeed);
@@ -80,7 +79,7 @@ public class ArrowManager : MonoBehaviour
     public void TrapArrowSpawn()
     {
         // -- 화살 3개가 생성 , 따라서 3번 반복 -- //
-        for(int i = 0; i <= 2; i++)
+        for (int i = 0; i <= 2; i++)
         {
             // -- 풀링 된 화살을 가져와 오브젝트 변수에 할당 -- //
             GameObject TrapArrow = objectPoolManager.GetObjectFromPool(objectPoolManager.TrapArrowPool);

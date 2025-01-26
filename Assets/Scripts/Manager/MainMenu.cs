@@ -10,7 +10,6 @@ public class MainMenu : MonoBehaviour
     int LimitLevel = 5;
 
     // 매니저
-    [SerializeField] private GameManager gameManager;
     [SerializeField] private AudioManager audioManager;
 
     // 오브젝트
@@ -43,7 +42,7 @@ public class MainMenu : MonoBehaviour
         NowLevel_Game = DataManager.Instance.data.NowLevel_Game;
         // 데이터 매니저에 저장된 해금 레벨 불러오기 (현재 어느 레벨까지 해금됐는지 알 수 있다.)    
         UnLockLevel_Game = DataManager.Instance.data.UnLockLevel_Game;
-        
+
         // 게임 시작 버튼 or 잠금 해제 버튼
         SetBtn();
         // 화면 설정
@@ -92,7 +91,7 @@ public class MainMenu : MonoBehaviour
         // 해금 레벨 +1
         SetUnLockLevel(NowLevel_Game);
         // 해금 애니메이션 실행
-        LockAnim.SetTrigger("UnLock");              
+        LockAnim.SetTrigger("UnLock");
     }
 
     public void SetUnLockLevel(int NowLevel)
@@ -107,19 +106,19 @@ public class MainMenu : MonoBehaviour
         UnLockLevel_Game = NowLevel;
     }
 
-    public void SetLockScene()                  
+    public void SetLockScene()
     {
         if (NowLevel_Game <= UnLockLevel_Game)
         {
             LockScene.SetActive(false);
             StartBtn.SetActive(true);
-            gameManager.ChangeLevelSprite(NowLevel_Game);
+            GameManager.instance.ChangeLevelSprite(NowLevel_Game);
             LevelName_Game.text = LevelNames[NowLevel_Game];
             SelectBtnAnim.SetTrigger("Rattle");
 
             UnLock_Icon.SetActive(false);
             BestScore_Icon.SetActive(true);
-            switch (NowLevel_Game)            
+            switch (NowLevel_Game)
             {
                 case 0:
                     BestScoreOrUnLockRemainTxt.text = "최고 점수 : " + DataManager.Instance.data.Level_1_Score;

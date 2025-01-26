@@ -1,11 +1,12 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.AI;
+using UnityEngine.Experimental.AI;
+using Slider = UnityEngine.UI.Slider;
 
 public class Player : MonoBehaviour
 {
     // -- 매니저 -- //
-    [SerializeField] GameManager gameManager;
     [SerializeField] Game game;
 
     // -- 애니메이션 -- //
@@ -23,21 +24,25 @@ public class Player : MonoBehaviour
     public bool HeatBarResetTrig = true;
     public bool Stun = false;
 
-    [SerializeField] private Slider HeatBar;    
+    [SerializeField] private Slider HeatBar;
+
     Vector3 HeatBarLocate = new Vector3(0, 1f, 0);    // HeatBar 위치
-    Vector3 previouPosition;    // 이전 플레이어 위치
+    private Vector3 lastPosition;    // 이전 플레이어 위치  
+
+    private Vector3 offset;
+
 
     void Update()
     {
-        if (ControllerTrig && gameManager.IsGameActive())
+        if (!Stun && ControllerTrig && GameManager.instance.IsGameActive())
         {
             PlayerTouchMove();
         }
 
-        if (previouPosition != transform.position && HeatBar.IsActive())
-        { 
+        if (lastPosition != transform.position && HeatBar.IsActive())
+        {
             HeatBar.transform.position = transform.position + HeatBarLocate;
-            previouPosition = transform.position;
+            lastPosition = transform.position;
 
             if (HeatBar.value >= 1 && HeatBarResetTrig)
             {
@@ -47,7 +52,7 @@ public class Player : MonoBehaviour
 
                 IEnumerator HeatBarReset()
                 {
-                    while (gameManager.IsGameActive() && HeatBar.value > 0f)           // Bar가 리셋되기 전까지 실행
+                    while (GameManager.instance.IsGameActive() && HeatBar.value > 0f)           // Bar가 리셋되기 전까지 실행
                     {
                         HeatBar.value -= Time.deltaTime * 2.5f;
                         yield return null;
@@ -80,7 +85,7 @@ public class Player : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         // -- 충돌한 오브젝트의 태그가 "Arrow"이고 game이 진행중이면 실행 -- //
-        if (collision.gameObject.CompareTag("Arrow") && gameManager != null && gameManager.IsGameActive())
+        if (collision.gameObject.CompareTag("Arrow") && GameManager.instance != null && GameManager.instance.IsGameActive())
         {
             // -- 플레이어 죽는 애니메이션 실행 -- //
             PlayerAnim.SetTrigger("IsDie");
@@ -89,7 +94,7 @@ public class Player : MonoBehaviour
             game.StopGame();
         }
         // -- 충돌한 오브젝트의 태그가 "GrassObstacle"이고 game이 진행중이면 실행 -- //
-        else if (collision.gameObject.CompareTag("GrassObstacle") && gameManager != null && gameManager.IsGameActive())
+        else if (collision.gameObject.CompareTag("GrassObstacle") && GameManager.instance != null && GameManager.instance.IsGameActive())
         {
             // -- 플레이어 기절 애니메이션 실행 -- //
             PlayerAnim.SetTrigger("IsStun");
@@ -101,10 +106,35 @@ public class Player : MonoBehaviour
         }
     }
 
+    void OnMouseDown()
+    {
+        // 마우스와 오브젝트 간의 거리 계산
+        offset = transform.position - GetMouseWorldPos();
+    }
+
+    void OnMouseDrag()
+    {
+        if (!Stun && GameManager.instance != null && GameManager.instance.IsGameActive())
+        {
+            // 마우스 드래그 시 오브젝트 이동
+            Vector3 newPosition = GetMouseWorldPos() + offset;
+            newPosition.x = Mathf.Clamp(newPosition.x, minX, maxX);
+            transform.position = newPosition;
+        }
+    }
+
+    private Vector3 GetMouseWorldPos()
+    {
+        // 마우스 위치를 월드 좌표로 변환
+        Vector3 mousePoint = Input.mousePosition;
+        mousePoint.y = transform.position.y;
+        return Camera.main.ScreenToWorldPoint(mousePoint);
+    }
+
     IEnumerator Delay()
     {
         yield return new WaitForSecondsRealtime(0.5f);
-        if(gameManager.IsGameActive())
+        if (GameManager.instance.IsGameActive())
         {
             PlayerAnim.SetTrigger("IsRun");
         }

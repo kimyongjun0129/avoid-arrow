@@ -3,18 +3,12 @@ using UnityEngine;
 
 public class GrassObstacle : MonoBehaviour
 {
-    [SerializeField] private GameManager gameManager;
     [SerializeField] private float Speed;
 
     // 속도를 동적으로 변경하는 함수
     public void SetSpeed(float newSpeed)
     {
         Speed = newSpeed;
-    }
-
-    void Start()
-    {
-        //game = FindObjectOfType<Game>();
     }
 
     // Update is called once per frame
@@ -48,7 +42,7 @@ public class GrassObstacle : MonoBehaviour
     // 장애물이 무언가에 부딪히면 삭제
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Player") && gameManager != null && gameManager.IsGameActive())
+        if (collision.gameObject.CompareTag("Player") && GameManager.instance != null && GameManager.instance.IsGameActive())
         {
             DestroyObstacle();
         }

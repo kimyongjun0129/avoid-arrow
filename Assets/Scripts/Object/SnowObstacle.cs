@@ -1,28 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class SnowObstacle : MonoBehaviour
 {
-    [SerializeField] private GameManager gameManager;
-    [SerializeField] private Snow snow;
     [SerializeField] private float Speed;
-    [SerializeField] private Player player;
+    public Snow snow;
 
+    private void Start()
+    {
+        snow = FindObjectOfType<Snow>();
+    }
 
     // 속도를 동적으로 변경하는 함수
     public void SetSpeed(float newSpeed)
     {
         Speed = newSpeed;
-    }
-
-    private void Start()
-    {
-        //game = FindObjectOfType<Game>();
-        player = FindObjectOfType<Player>();
-        snow = FindObjectOfType<Snow>();
     }
 
     // Update is called once per frame
@@ -63,7 +54,8 @@ public class SnowObstacle : MonoBehaviour
     // 장애물이 무언가에 부딪히면 삭제
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Player") && gameManager != null && gameManager.IsGameActive())
+        Debug.Log("hi");
+        if (collision.gameObject.CompareTag("Player") && GameManager.instance != null && GameManager.instance.IsGameActive())
         {
             snow.SnowObstacle();
             DestroyObstacle();

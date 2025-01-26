@@ -6,7 +6,6 @@ public class ScoreManager : MonoBehaviour
 {
     public Text textScore;
     [SerializeField] private LevelManager levelManager;
-    [SerializeField] private GameManager gameManager;
     [SerializeField] private ObjectPoolManager objectPoolManager;
     [SerializeField] private Game game;
 
@@ -45,11 +44,11 @@ public class ScoreManager : MonoBehaviour
                 break;
         }
     }
-    
+
     // 최고 점수보다 현 점수가 더 높으면 업데이트
     public int CheckHighScore(int highScore)
     {
-        if(highScore < score)
+        if (highScore < score)
         {
             highScore = score;
         }
@@ -65,7 +64,7 @@ public class ScoreManager : MonoBehaviour
     // Coroutine to increase the score every second
     public IEnumerator IncreaseScoreRoutine()  // 점수 증가
     {
-        while (gameManager.IsGameActive())  // 게임이 진행중인 동안만 코루틴 실행
+        while (GameManager.instance.IsGameActive())  // 게임이 진행중인 동안만 코루틴 실행
         {
             score++;            // 점수 1 증가
             UpdateScoreText();  // 현재 점수를 Score Text로 변경
@@ -76,7 +75,7 @@ public class ScoreManager : MonoBehaviour
     }
     IEnumerator PlusScore()
     {
-        while (gameManager.IsGameActive())  // 게임이 진행중인 동안만 코루틴 실행
+        while (GameManager.instance.IsGameActive())  // 게임이 진행중인 동안만 코루틴 실행
         {
             // 생성 함수 호출
             GameObject PlusScore = objectPoolManager.GetObjectFromPool(objectPoolManager.plusScorePool);

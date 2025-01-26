@@ -3,7 +3,6 @@ using UnityEngine;
 public class Star : MonoBehaviour
 {
     [SerializeField] private AudioManager audioManager;
-    [SerializeField] private GameManager gameManager;
     [SerializeField] private ScoreManager scoreManager;
     [SerializeField] private float Speed;
 
@@ -15,7 +14,6 @@ public class Star : MonoBehaviour
 
     private void Start()
     {
-        gameManager = FindObjectOfType<GameManager>();
         audioManager = FindObjectOfType<AudioManager>();
         scoreManager = FindObjectOfType<ScoreManager>();
     }
@@ -50,7 +48,7 @@ public class Star : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Player") && gameManager != null && gameManager.IsGameActive())
+        if (collision.gameObject.CompareTag("Player") && GameManager.instance != null && GameManager.instance.IsGameActive())
         {
             audioManager.playSound(3);
             scoreManager.score += 2;

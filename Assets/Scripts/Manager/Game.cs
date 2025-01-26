@@ -11,7 +11,6 @@ public class Game : MonoBehaviour
     // 매니저
     [SerializeField] private ObjectPoolManager poolManager;
     [SerializeField] private LevelManager levelManager;
-    [SerializeField] private GameManager gameManager;
     [SerializeField] private ScoreManager scoreManager;
     [SerializeField] private AudioManager audioManager;
     [SerializeField] private ArrowManager arrowManager;
@@ -43,7 +42,7 @@ public class Game : MonoBehaviour
     public void StopGame()              // 게임 중단
     {
         // 게임 중단 옵션
-        gameManager.isGameActive = false;            // 게임 진행 상태 : 멈춤
+        GameManager.instance.isGameActive = false;            // 게임 진행 상태 : 멈춤
         poolManager.StopPooling();                  // 풀링 중단 (더이상 화살이 생성되지 않음)
 
         if (NowLevel == 4)
@@ -121,7 +120,7 @@ public class Game : MonoBehaviour
             else
             {
                 // 누적점수가 필요점수보다 커지면, 필요점수까지만 오르도록 제한
-                DataManager.Instance.data.Level_Score_Sum = DataManager.Instance.data.Level_Score_UnLock[NowLevel + 1];  
+                DataManager.Instance.data.Level_Score_Sum = DataManager.Instance.data.Level_Score_UnLock[NowLevel + 1];
             }
         }
         // 게임 저장

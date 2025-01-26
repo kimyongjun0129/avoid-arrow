@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class Snow : MonoBehaviour
 {
     [SerializeField] GameObject snow;
-    [SerializeField] GameManager gameManager;
     [SerializeField] Game game;
     [SerializeField] Player player;
 
@@ -33,9 +32,9 @@ public class Snow : MonoBehaviour
 
     IEnumerator StartSnowing()
     {
-        while (gameManager.IsGameActive() && snowTrig)
+        while (GameManager.instance.IsGameActive() && snowTrig)
         {
-            if(Image.color.a < 1f)
+            if (Image.color.a < 1f)
             {
                 float alphaValue = Time.deltaTime * 0.05f;
                 Color currentAlpha = Image.color;
@@ -67,7 +66,7 @@ public class Snow : MonoBehaviour
     IEnumerator ResetSnowing()
     {
         Color currentAlpha = Image.color;
-        while (gameManager.IsGameActive() && currentAlpha.a > 0f)
+        while (GameManager.instance.IsGameActive() && currentAlpha.a > 0f)
         {
             currentAlpha.a -= Time.deltaTime * 2.5f;
             Image.color = currentAlpha;
